@@ -3,6 +3,7 @@ import sys
 import re
 import html
 import pandas as pd
+from pyroaman.block import Block
 
 question_prefix = "- "
 prefix_length = [0, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42]
@@ -199,9 +200,54 @@ def save_card(Q, A_list):
     return Q, A_list[0]
 
 def block2question(block):
-    pass
 
-def block2answer(block):
+    ret = "" 
+    multiline_equation = False
+    multiline_code_first_line = False
+    multiline_code = False
+    question_state = False
+    current_answer_state = 0
+    previous_answer_state = 0
+    h1 = False
+    h2 = False
+    h3 = False
+    for line in block.split("\n"):
+        if not line.strip():
+            continue
+        if line.startswith("```"):
+            multiline_code = True
+            multiline_code_first_line = True
+            line = line[3:]
+            ret += code_block_start(line)
+        elif line.startswith("$$") and "$$" not in line[2:]:
+            # 多行行间公式匹配开始
+            multiline_equation = True
+            ret += "\\[" + html.escape(line[2:])
+        else:
+            # 仅在非代码块时匹配行内格式
+            line = inline_equation(block_equation(line))
+            line = html.escape(line)
+            line = all_inline_format(line)
+            if question_state:
+                ret += "<br>"
+            if line.startswith("# "):
+                ret += "<h1>" + line[2:] + "</h1>"
+                h1 = True
+            elif line.startswith("## "):
+                ret += "<h2>" + line[3:] + "</h2>"
+                h2 = True
+            elif line.startswith("### "):
+                ret += "<h3>" + line[4:] + "</h3>"
+                h3 = True
+            else:
+                ret += line
+        question_state = True
+        current_answer_state = 0
+        previous_answer_state = 0
+    return ret 
+
+
+def block2answer(block: Block):
     pass
 
 def block2html(lines):
