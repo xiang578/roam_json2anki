@@ -198,6 +198,12 @@ def save_card(Q, A_list):
     # print("A:", A_list[0])
     return Q, A_list[0]
 
+def block2question(block):
+    pass
+
+def block2answer(block):
+    pass
+
 def block2html(lines):
     Q = ""
     # A[i]对应某一级中的内容
