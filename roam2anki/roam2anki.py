@@ -183,8 +183,8 @@ def save_A_list(Q, A_list, output):
             A_list[index - 1] += "<ul>\n" + A_list[index] + "\n</ul>"
         index -= 1
 
-    # print("Q:", Q)
-    # print("A:", A_list[0])
+    print("Q:", Q)
+    print("A:", A_list[0])
     return output.append([{'Q': Q, 'A': A_list[0]}], ignore_index=True)
 
 
@@ -206,7 +206,10 @@ def main(file_path):
         h1 = False
         h2 = False
         h3 = False
+        cnt = 0
         for line in f.readlines():
+            print(cnt, line)
+            cnt += 1
             line = line.strip('\n')
             if not line.strip():
                 continue

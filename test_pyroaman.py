@@ -8,7 +8,7 @@ some_blocks = db.lookup('testcard')
 # print(some_blocks)
 
 for blocks in some_blocks:
-    print(blocks)
+    print(blocks.raw_str)
     print(blocks.children)
 # print(some_blocks[0].text)
 # print(dir(some_blocks[0]))

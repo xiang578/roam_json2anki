@@ -8,6 +8,7 @@ from cached_property import cached_property
 class Block:
     string: str
     is_page: bool
+    uid: str
     metadata: Dict[str, Any]
 
     parent: Optional['Block']
@@ -18,6 +19,10 @@ class Block:
     @cached_property
     def text(self) -> str:
         return remove_formatting(self.string)
+
+    @cached_property
+    def raw_str(self) -> str:
+        return self.string
 
     def get_descendants(self) -> Iterator['Block']:
         yield from self.children
@@ -37,7 +42,7 @@ class Block:
         if len(string) > max_str_length:
             string = string[:max_str_length-3].rstrip(' ').rstrip('\n') + '...'
 
-        return f'Block (string: "{string}", is_page: {self.is_page}, ' \
+        return f'Block (uid: "{self.uid}", string: "{string}", is_page: {self.is_page}, '\
              + f'children: {len(self.children)}, links: {len(self.links)}, ' \
              + f'backlinks: {len(self.backlinks)})'
 

@@ -1,3 +1,4 @@
+from curses import meta
 from typing import Iterator, List, Dict
 import re
 from copy import deepcopy
@@ -18,6 +19,8 @@ def parse_block(raw: Dict) -> Block:
         del metadata['string']
     if 'title' in metadata:
         del metadata['title']
+    if 'uid' in metadata['uid']:
+        del metadata['uid']
 
     if 'string' in raw:
         string = raw['string']
@@ -29,6 +32,7 @@ def parse_block(raw: Dict) -> Block:
     return Block(
         string=string,
         is_page='title' in raw,
+        uid= raw['uid'],
         metadata=metadata,
         parent=None,
         children=children,
